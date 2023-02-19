@@ -70,5 +70,30 @@ namespace AM.ApplicationCore.Service
         }
 
         public List<Flight> Flights { get; set; }
+
+        public IEnumerable<Tuple<int , float>> GetDurationsInMinutes() 
+        { 
+            return source.Select(e => new Tuple<int , float>(e.FlightId, e.EstimatedDuration * 60)); 
+        }
+
+        public List<Flight> GetFlightsSortedByDuration()
+        {
+            return source.OrderByDescending(e => e.EstimatedDuration).ToList();
+        }
+
+        public float GetDurationsAverage()
+        {
+            return source.Average(e => e.EstimatedDuration);
+        }
+
+        public IEnumerable<String> GetPassengerTypes( int idVol )
+        {
+            return source.Where(e => e.FlightId == idVol ).First().passengers.Select(e => e.PassngerType );
+        }
+
+        public IEnumerable<Tuple<int , float>> GetDurationsInMinutesLINQ()
+        {
+            return from p in source select new Tuple<int , float>(p.FlightId, p.EstimatedDuration * 60);
+        }
     }
 }
